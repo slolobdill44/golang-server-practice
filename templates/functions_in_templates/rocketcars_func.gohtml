@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>my cool cars</title>
+</head>
+<body>
+    {{range $key, $val := .}}
+		<h1>{{ft $val}}</h1>
+        <h1>{{uc $key}}</h1>
+	{{end}}
+</body>

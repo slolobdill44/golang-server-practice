@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Hello World!</title>
+</head>
+<body>
+	{{range $index, $element := .}}
+		<h1>i go vroom vroom in my {{$element}}, which is my #{{$index}} car</h1>
+	{{end}}
+</body>
