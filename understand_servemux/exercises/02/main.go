@@ -3,9 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"html/template"
 	"io"
 	"log"
 	"net"
+	"net/http"
 	"strings"
 )
 
@@ -58,11 +60,25 @@ func serve(connection net.Conn) {
 		i++
 	}
 
-	payload := `<h2>Home page</h1>
-	<form>
-		<input ></input>
-	</form>
-	<a href="apply.gohtml">/apply</a>`
+	var payload string
+
+	switch uri {
+	case "/":
+		payload = http.HandlerFunc(home)
+	case "/apply":
+		payload = `
+		<h2>Apply Page</h2>
+		<form>
+			<input ></input>  <button>submit</submit>
+		</form>
+
+		<p><a href="home">/home</a></p>`
+	default:
+		payload = `
+		
+		<h2>Home page</h1>
+		<a href="apply">/apply</a>`
+	}
 
 	io.WriteString(connection, "HTTP/1.1 200 OK\r\n")
 
@@ -80,4 +96,14 @@ func serve(connection net.Conn) {
 
 	connection.Close()
 
+}
+
+func home(resp http.ResponseWriter, req *http.Request) {
+	tpl, err := template.ParseFiles("home.gohtml")
+
+	if err != nil {
+		log.Fatalln("There was an error parsing the home page")
+	}
+
+	err = tpl.ExecuteTemplate(resp, "home.gohtml", nil)
 }
